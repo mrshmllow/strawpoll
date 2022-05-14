@@ -18,7 +18,7 @@ import { getClientIp } from 'request-ip'
 import { adminSupabase } from '../lib/adminSupabaseClient'
 import TimeSince from '../components/TimeSince'
 import Head from 'next/head'
-import { Main } from '../components/Primitives'
+import { Button, Main } from '../components/Primitives'
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -111,30 +111,23 @@ const Poll: React.FC<{
         </div>
       ) : (
         <div className="flex flex-col items-center gap-2">
-          <button
-            type="button"
-            className={`text-white bg-${poll.colour}-700 hover:bg-${poll.colour}-800 focus:ring-4 focus:ring-${poll.colour}-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-${poll.colour}-600 dark:hover:bg-${poll.colour}-700 focus:outline-none dark:focus:ring-${poll.colour}-800 disabled:dark:bg-slate-700 transition-colors`}
+          <Button
             disabled={loading || !selected}
-            onClickCapture={async () => {
+            onClickLoad={async (e, setLoading) => {
+              e.preventDefault()
               setLoading(true)
               await fetch(`/api/${selected}`)
-              setVoted(true)
               setLoading(false)
-            }}>
+              setVoted(true)
+            }}
+            loadingText="Voting..."
+          >
             {!selected ? (
               <>Choose an option</>
-            ) : loading ? (
-              <>
-                <FontAwesomeIcon
-                  className="animate-spin mr-2"
-                  icon={faCircleNotch}
-                />
-                Voting...
-              </>
             ) : (
               `Vote ${options.find(option => option.id === selected)!.option}`
             )}
-          </button>
+          </Button>
           <span>
             <FontAwesomeIcon className="mr-2" icon={faLock} />
             Your IP is saved for protection
