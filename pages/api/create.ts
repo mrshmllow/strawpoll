@@ -6,17 +6,21 @@ import * as colours from '../../lib/colours/colours'
 
 const short = shortUUID()
 
+export interface CreateReturn {
+  error: true | null | string
+  url: string | null
+}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{
-    error: true | null | string
-    url: string | null
-  }>
+  res: NextApiResponse<CreateReturn>
 ) {
-  const { question, options } = req.body as {
+  let { question, options } = req.body as {
     question?: string
     options?: string[]
   }
+
+  options = options && options.filter(option => option.length > 0)
 
   if (
     options === undefined ||
