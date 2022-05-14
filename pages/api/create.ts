@@ -63,6 +63,6 @@ export default async function handler(
 
   return res.status(200).json({
     error: null,
-    url: `${req.headers.host}/${poll!.id}`,
+    url: `/${poll!.id}`,
   })
 }
