@@ -11,6 +11,17 @@ import { CreateReturn } from './api/create'
 
 const short = shortUUID()
 
+const jokes = [
+  {
+    question: "Cats or Dogs?",
+    options: [
+      "Cats!",
+      "Dogs!",
+      "Rats!?"
+    ]
+  }
+]
+
 const Home: NextPage = () => {
   const titleRef = useRef<HTMLInputElement>(null!)
   const [title, setTitle] = useState('')
@@ -63,6 +74,9 @@ const Home: NextPage = () => {
               key={option.id}
               required={index <= 1}
               value={option.option}
+              placeholder={
+                jokes[0].options[index] ? jokes[0].options[index] : index === 9 ? "The final option" : `A ${index + 1}${nth(index + 1)} option`
+              }
               onChange={e => {
                 e.preventDefault()
                 if (index === options.length - 1 && options.length < 10) {
