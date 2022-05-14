@@ -54,7 +54,7 @@ const Home: NextPage = () => {
             key={option.id}
             required
             onChangeCapture={e => {
-              if (index === options.length - 1)
+              if (index === options.length - 1) {
                 setOptions(options => [
                   ...options,
                   {
@@ -62,29 +62,25 @@ const Home: NextPage = () => {
                     option: '',
                   },
                 ])
-
-              setOptions(options => {
-                const copy = options.slice()
-                copy[index] = {
-                  ...copy[index],
-                  // @ts-ignore
-                  option: e.target.value,
-                }
-                return copy
-              })
+              } else if (
+                index === options.length - 2 &&
+                (e.target as HTMLInputElement).value.length === 0
+              ) {
+                setOptions(options => options.filter((_, i) => index + 1 > i))
+              } else {
+                setOptions(options => {
+                  const copy = options.slice()
+                  copy[index] = {
+                    ...copy[index],
+                    option: (e.target as HTMLInputElement).value,
+                  }
+                  return copy
+                })
+              }
             }}
             onBlurCapture={e => {
-              if (e.target.value.length === 0) {
-                // Todo: Dont be so complicated
-                const matched = options.filter(
-                  (option, i) => index > i && option.option.length === 0
-                )
-
-                if (matched.length > 0) {
-                  setOptions(matched)
-                } else if (index !== options.length - 1) {
-                  setOptions(options => options.filter(v => v.id !== option.id))
-                }
+              if (e.target.value.length === 0 && index !== options.length - 1) {
+                setOptions(options => options.filter(v => v.id !== option.id))
               }
             }}
           />
