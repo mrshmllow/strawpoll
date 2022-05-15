@@ -9,16 +9,8 @@ import {
   useState,
 } from 'react'
 
-export const Main: React.FC<{ children: ReactNode; className?: string }> = ({
-  children,
-  className,
-}) => (
-  <main
-    className={`p-2 m-auto sm:w-11/12 md:w-3/5 lg:w-2/5 ${
-      className && className
-    }`}>
-    {children}
-  </main>
+export const Main: React.FC<{ children: ReactNode }> = ({ children }) => (
+  <main className="m-auto px-2 sm:w-11/12 md:w-3/5 lg:w-2/5">{children}</main>
 )
 
 export const Button: React.FC<

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,800;0,900;1,800&display=swap');
+
+@layer base {
+  html {
+    font-family: 'Nunito', sans-serif;
+  }
+}
+
 html,
 body {
   padding: 0;
