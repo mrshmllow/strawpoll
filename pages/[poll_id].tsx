@@ -51,8 +51,9 @@ const Poll: React.FC<{
   const [selected, setSelected] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    const socket = io('localhost:4000', {
+    const socket = io({
       withCredentials: true,
+      path: '/api/socket.io/',
     })
 
     socket.on('connect', () => {
@@ -147,13 +148,11 @@ const Poll: React.FC<{
               disabled={!selected}
               onClickLoad={async (e, setLoading) => {
                 e.preventDefault()
-
+                
+                // todo make proper loading
                 setLoading(true)
                 socket.emit('vote', selected)
-                console.log('sent')
-                // await fetch(`/api/${selected}`)
                 setLoading(false)
-                // setVoted(true)
               }}
               loadingText="Voting...">
               {!selected ? (
