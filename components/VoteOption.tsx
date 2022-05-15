@@ -1,6 +1,6 @@
 import { faCircle, faCircleDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { IOption } from '../types/tables'
 
 const VoteOption: React.FC<{

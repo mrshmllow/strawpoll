@@ -18,9 +18,15 @@ const nextConfig = {
     //   })
     // }
 
-    // Object.assign(config.plugins, [
-    //   new BundleAnalyzerPlugin()
-    // ])
+    if (process.env.ANALYZE) {
+     config.plugins.push(
+       new BundleAnalyzerPlugin({
+         analyzerMode: 'server',
+         analyzerPort: isServer ? 9999 : 9999,
+         openAnalyzer: true,
+       })
+      )
+    }
 
     return config
   },

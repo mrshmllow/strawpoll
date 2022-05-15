@@ -6,11 +6,9 @@ import ViewOption from '../components/ViewOption'
 import { useSubscription } from 'react-supabase'
 import { useRouter } from 'next/router'
 import pluralize from 'pluralize'
-import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBolt,
-  faCircleNotch,
   faLock,
 } from '@fortawesome/free-solid-svg-icons'
 import VoteOption from '../components/VoteOption'
@@ -19,6 +17,7 @@ import { adminSupabase } from '../lib/adminSupabaseClient'
 import TimeSince from '../components/TimeSince'
 import Head from 'next/head'
 import { Button, Main } from '../components/Primitives'
+import dayjs from "../lib/dayjs"
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -54,7 +53,6 @@ const Poll: React.FC<{
   )
   const [voted, setVoted] = useState(inital_voted)
   const [selected, setSelected] = useState<string | undefined>(undefined)
-  const [loading, setLoading] = useState(false)
 
   return (
     <Main>
@@ -72,7 +70,7 @@ const Poll: React.FC<{
 
       <div className="flex justify-between sm:text-2xl">
         <span>{pluralize('votes', total_votes, true)}</span>
-        <TimeSince dateTime={DateTime.fromISO(poll.created_at)} />
+        <TimeSince time={dayjs(poll.created_at)} />
       </div>
 
       <hr className="my-2 border-slate-500 dark:border-slate-400" />
@@ -112,7 +110,7 @@ const Poll: React.FC<{
       ) : (
         <div className="flex flex-col items-center gap-2">
           <Button
-            disabled={loading || !selected}
+            disabled={!selected}
             onClickLoad={async (e, setLoading) => {
               e.preventDefault()
               setLoading(true)
@@ -120,8 +118,7 @@ const Poll: React.FC<{
               setLoading(false)
               setVoted(true)
             }}
-            loadingText="Voting..."
-          >
+            loadingText="Voting...">
             {!selected ? (
               <>Choose an option</>
             ) : (

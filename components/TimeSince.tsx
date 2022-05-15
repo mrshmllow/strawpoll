@@ -1,24 +1,20 @@
-import { DateTime } from 'luxon'
+import dayjs from '../lib/dayjs'
 import { useEffect, useState } from 'react'
 
-const TimeSince: React.FC<{ dateTime: DateTime }> = ({ dateTime }) => {
-  const [show, setShow] = useState(false)
+const TimeSince: React.FC<{ time: dayjs.Dayjs }> = ({ time }) => {
   const [_, setCount] = useState(0)
 
   useEffect(() => {
-    setShow(true)
-
     const intervalId = setInterval(() => {
       setCount(prevCount => prevCount + 1)
-    }, 1000)
+    }, 5000)
 
     return () => clearInterval(intervalId)
   }, [])
 
   return (
-    <>{show ? <span>{dateTime.toRelative()}</span> : <span>Loading</span>}</>
+    <span>{time.fromNow()}</span>
   )
-  // return <>{false ? <span>{dateTime.toRelative()}</span> : <span className='w-1/5 h-8 rounded-md animate-pulse bg-slate-500 dark:bg-slate-400' />}</>
 }
 
 export default TimeSince

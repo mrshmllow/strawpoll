@@ -6,17 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@supabase/supabase-js": "^1.35.3",
-    "@types/luxon": "^2.3.2",
+    "dayjs": "^1.11.2",
     "framer-motion": "^6.3.3",
     "js-cookie": "^3.0.1",
-    "luxon": "^2.4.0",
     "next": "^12.1.7-canary.4",
     "num-words": "^1.2.2",
     "pluralize": "^8.0.0",
