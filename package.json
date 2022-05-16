@@ -2,6 +2,7 @@
   "name": "strawpoll",
   "version": "0.1.0",
   "private": true,
+  "cacheDirectories": [".next/cache"],
   "scripts": {
     "dev": "TAILWIND_MODE=watch next dev",
     "build": "next build",
