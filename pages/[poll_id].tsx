@@ -131,7 +131,6 @@ const Poll: React.FC<{
                 option={option}
                 setSelected={setSelected}
                 selected={selected}
-                colour={poll.colour}
               />
             )
           )}
