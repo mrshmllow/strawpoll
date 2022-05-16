@@ -37,7 +37,7 @@ export default async function handler(
     })
 
     io.on('connection', socket => {
-      const address = socket.handshake.address
+      const address = socket.request.socket.remoteAddress
 
       socket.on('join', (poll: string) => socket.join(`poll:${poll}`))
 
