@@ -25,14 +25,16 @@ export default async function handler(
     const io = new Server(httpServer, {
       path: '/api/socket.io/',
     })
-    
+
     // Connect to redis for subpub
     const pubClient = createClient({
-      url: process.env.REDIS_URL
+      url: process.env.REDIS_URL,
     })
     const subClient = pubClient.duplicate()
 
-    io.adapter(createAdapter(pubClient, subClient))
+    Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+      io.adapter(createAdapter(pubClient, subClient))
+    })
 
     io.on('connection', socket => {
       const address = socket.handshake.address
