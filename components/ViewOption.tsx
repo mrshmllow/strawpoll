@@ -13,7 +13,7 @@ const ViewOption: React.FC<{
   }, [option.votes, max])
 
   return (
-    <>
+    <div role="listitem">
       <div
         className={`flex justify-between text-${colour}-700 dark:text-slate-200 font-medium`}>
         <span className="text-lg sm:text-2xl">{option.option}</span>
@@ -26,7 +26,7 @@ const ViewOption: React.FC<{
           initial={{ width: 0 }}
           transition={{ ease: 'easeInOut' }}></m.div>
       </div>
-    </>
+    </div>
   )
 }
 

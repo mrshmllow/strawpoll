@@ -118,7 +118,9 @@ const Poll: React.FC<{
 
         <hr className="my-1 border-slate-500 dark:border-slate-400" />
 
-        <div className="flex flex-col gap-3">
+        <div
+          className="flex flex-col gap-3"
+          role={voted ? 'listbox' : 'radiogroup'}>
           {options.map((option, index) =>
             voted ? (
               <ViewOption
@@ -155,7 +157,7 @@ const Poll: React.FC<{
               disabled={!selected}
               onClickLoad={async (e, setLoading) => {
                 e.preventDefault()
-                
+
                 // todo make proper loading
                 setLoading(true)
                 socket.emit('vote', selected)

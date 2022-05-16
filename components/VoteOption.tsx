@@ -9,11 +9,15 @@ const VoteOption: React.FC<{
   setSelected: Dispatch<SetStateAction<string | undefined>>
 }> = ({ option, selected, setSelected }) => {
   return (
-    <label
+    <button
       className={`w-full text-blue-700 dark:text-slate-200 font-medium transition-colors rounded-md flex items-center h-11 cursor-pointer ${
         selected === option.id ? 'dark:bg-slate-800' : 'hover:dark:bg-slate-800'
       }`}
-      onClick={() => setSelected(option.id)}>
+      onClick={() => setSelected(option.id)}
+      aria-label={option.option}
+      role="radio"
+      aria-checked={selected === option.id}
+      id={option.id}>
       <FontAwesomeIcon
         className={`mx-3 ${
           selected === option.id
@@ -23,8 +27,10 @@ const VoteOption: React.FC<{
         size="lg"
         icon={selected === option.id ? faCircleDot : faCircle}
       />
-      <span className="text-lg sm:text-2xl">{option.option}</span>
-    </label>
+      <label htmlFor={option.id} className="text-lg cursor-pointer sm:text-2xl">
+        {option.option}
+      </label>
+    </button>
   )
 }
 
