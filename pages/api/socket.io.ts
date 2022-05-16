@@ -1,37 +1,45 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { Server } from "socket.io";
-import { Server as NetServer } from "http";
-import { IOption, IVote } from "../../types/tables";
-import { adminSupabase } from "../../lib/adminSupabaseClient";
-import { Socket as NetSocket } from "net";
+import { NextApiRequest, NextApiResponse } from 'next'
+import { Server } from 'socket.io'
+import { Server as NetServer } from 'http'
+import { IOption, IVote } from '../../types/tables'
+import { adminSupabase } from '../../lib/adminSupabaseClient'
+import { Socket as NetSocket } from 'net'
+import { createClient } from 'redis'
+import { createAdapter } from '@socket.io/redis-adapter'
 
 export type NextApiResponseServerIO = NextApiResponse & {
   socket: NetSocket & {
     server: NetServer & {
-      io: Server;
-    };
-  };
-};
+      io: Server
+    }
+  }
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponseServerIO
 ) {
   if (!res.socket.server.io) {
-    console.log("New Socket.io server...");
-
     // adapt Next's net Server to http Server
-    const httpServer: NetServer = res.socket.server as any;
+    const httpServer: NetServer = res.socket.server as any
     const io = new Server(httpServer, {
-      path: "/api/socket.io/",
-    });
+      path: '/api/socket.io/',
+    })
     
-    io.on("connection", (socket) => {
+    // Connect to redis for subpub
+    const pubClient = createClient({
+      url: process.env.REDIS_URL
+    })
+    const subClient = pubClient.duplicate()
+
+    io.adapter(createAdapter(pubClient, subClient))
+
+    io.on('connection', socket => {
       const address = socket.handshake.address
 
-      socket.on("join", (poll: string) => socket.join(`poll:${poll}`))
+      socket.on('join', (poll: string) => socket.join(`poll:${poll}`))
 
-      socket.on("vote", async (option: string) => {
+      socket.on('vote', async (option: string) => {
         const { data, error } = await adminSupabase
           .from<IOption>('options')
           .select('id,votes,owner')
@@ -65,12 +73,12 @@ export default async function handler(
           }),
         ])
 
-        io.to(`poll:${data.owner}`).emit("receive vote", option)
-        socket.emit("return")
+        io.to(`poll:${data.owner}`).emit('receive vote', option)
+        socket.emit('return')
       })
-    });
+    })
 
     res.socket.server.io = io
   }
-  res.end();
+  res.end()
 }
