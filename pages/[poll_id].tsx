@@ -108,7 +108,7 @@ const Poll: React.FC<{
       <div className="flex flex-col gap-2">
         <div>
           <span>Anonymous asks:</span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight break-all dark:text-slate-200">
             {poll.question}
           </h1>
         </div>
@@ -121,7 +121,7 @@ const Poll: React.FC<{
         <hr className="my-1 border-slate-500 dark:border-slate-400" />
 
         <div
-          className="flex flex-col gap-3"
+          className="grid auto-rows-auto gap-2"
           role={voted ? 'listbox' : 'radiogroup'}>
           {options.map((option, index) =>
             voted ? (

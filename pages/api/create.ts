@@ -20,14 +20,14 @@ export default async function handler(
     options?: string[]
   }
 
-  options = options && options.filter(option => option.length > 0)
+  options = options && options.filter(option => option.length > 0 && option.length <= 70)
 
   if (
     options === undefined ||
     !Array.isArray(options) ||
     options.length < 2 ||
     typeof question !== 'string' ||
-    question.length >= 60
+    question.length > 70
   ) {
     return res.status(400).json({
       error: 'Invalid data',

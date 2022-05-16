@@ -10,7 +10,7 @@ const VoteOption: React.FC<{
 }> = ({ option, selected, setSelected }) => {
   return (
     <button
-      className={`w-full text-blue-700 dark:text-slate-200 font-medium transition-colors rounded-md flex items-center h-11 cursor-pointer ${
+      className={`w-full text-blue-700 dark:text-slate-200 font-medium pr-2 py-2 transition-colors rounded-md flex items-center cursor-pointer text-lg sm:text-2xl break-all ${
         selected === option.id ? 'dark:bg-slate-800' : 'hover:dark:bg-slate-800'
       }`}
       onClick={() => setSelected(option.id)}
@@ -19,7 +19,7 @@ const VoteOption: React.FC<{
       aria-checked={selected === option.id}
       id={option.id}>
       <FontAwesomeIcon
-        className={`mx-3 ${
+        className={`mx-3 w-5 ${
           selected === option.id
             ? 'text-blue-600'
             : 'text-slate-400 dark:text-slate-600'
@@ -27,7 +27,7 @@ const VoteOption: React.FC<{
         size="lg"
         icon={selected === option.id ? faCircleDot : faCircle}
       />
-      <label htmlFor={option.id} className="text-lg cursor-pointer sm:text-2xl">
+      <label htmlFor={option.id} className="cursor-pointer">
         {option.option}
       </label>
     </button>

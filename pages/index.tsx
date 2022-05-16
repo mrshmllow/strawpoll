@@ -51,6 +51,7 @@ const Home: NextPage = () => {
             autoComplete="off"
             placeholder="Cats vs Dogs"
             required
+            maxLength={70}
             id="question"
             ref={titleRef}
             value={title}
@@ -70,6 +71,7 @@ const Home: NextPage = () => {
               key={option.id}
               required={index <= 1}
               value={option.option}
+              maxLength={70}
               placeholder={
                 jokes[0].options[index]
                   ? jokes[0].options[index]
