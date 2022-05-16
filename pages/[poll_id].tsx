@@ -28,7 +28,9 @@ const Poll: React.FC<{
 }> = ({ poll, inital_options, inital_voted }) => {
   const [options, setOptions] = useState(inital_options)
   const [socket, setSocket] = useState<Socket>(null!)
-  const [status, setStatus] = useState<"Live" | "Disconnected" | "Connecting...">("Connecting...")
+  const [status, setStatus] = useState<
+    'Live' | 'Disconnected' | 'Connecting...'
+  >('Connecting...')
   const router = useRouter()
   const { poll_id } = router.query as route
 
@@ -62,15 +64,15 @@ const Poll: React.FC<{
 
     socket.on('connect', () => {
       socket.emit('join', poll_id)
-      setStatus("Live")
+      setStatus('Live')
     })
 
-    socket.io.on("reconnect", () => router.reload())
-    socket.on("disconnect", () => setStatus("Disconnected"))
+    socket.io.on('reconnect', () => router.reload())
+    socket.on('disconnect', () => setStatus('Disconnected'))
 
     socket.on('receive vote', (option: string) =>
       setOptions(options => {
-        console.log("recieved vote")
+        console.log('recieved vote')
         const copy = [...options]
         const index = options.findIndex(find => find.id === option)
         copy[index] = {

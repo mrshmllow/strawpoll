@@ -12,13 +12,9 @@ const short = shortUUID()
 
 const jokes = [
   {
-    question: "Cats or Dogs?",
-    options: [
-      "Cats!",
-      "Dogs!",
-      "Rats!?"
-    ]
-  }
+    question: 'Cats or Dogs?',
+    options: ['Cats!', 'Dogs!', 'Rats!?'],
+  },
 ]
 
 const Home: NextPage = () => {
@@ -41,9 +37,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <form className='flex flex-col gap-2'>
+      <form className="flex flex-col gap-2">
         <div>
-          <label htmlFor='question' className='block sm:text-lg font-extrabold text-slate-900 tracking-tight dark:text-slate-200 text-left'>
+          <label
+            htmlFor="question"
+            className="block sm:text-lg font-extrabold text-slate-900 tracking-tight dark:text-slate-200 text-left">
             A question
           </label>
 
@@ -73,7 +71,11 @@ const Home: NextPage = () => {
               required={index <= 1}
               value={option.option}
               placeholder={
-                jokes[0].options[index] ? jokes[0].options[index] : index === 9 ? "The final option" : `A ${index + 1}${nth(index + 1)} option`
+                jokes[0].options[index]
+                  ? jokes[0].options[index]
+                  : index === 9
+                  ? 'The final option'
+                  : `A ${index + 1}${nth(index + 1)} option`
               }
               onChange={e => {
                 e.preventDefault()
@@ -129,7 +131,7 @@ const Home: NextPage = () => {
               }),
             })
 
-            const data = await fetched.json() as CreateReturn
+            const data = (await fetched.json()) as CreateReturn
 
             if (data.error === null) {
               router.push(data.url!)

@@ -12,9 +12,7 @@ const TimeSince: React.FC<{ time: dayjs.Dayjs }> = ({ time }) => {
     return () => clearInterval(intervalId)
   }, [])
 
-  return (
-    <span>{time.fromNow()}</span>
-  )
+  return <span>{time.fromNow()}</span>
 }
 
 export default TimeSince
