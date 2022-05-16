@@ -29,7 +29,8 @@ const Poll: React.FC<{
   const [options, setOptions] = useState(inital_options)
   const [socket, setSocket] = useState<Socket>(null!)
   const [status, setStatus] = useState<"Live" | "Disconnected" | "Connecting...">("Connecting...")
-  const { poll_id } = useRouter().query as route
+  const router = useRouter()
+  const { poll_id } = router.query as route
 
   // useSubscription<IOption>(
   //   payload => {
@@ -64,6 +65,7 @@ const Poll: React.FC<{
       setStatus("Live")
     })
 
+    socket.io.on("reconnect", () => router.reload())
     socket.on("disconnect", () => setStatus("Disconnected"))
 
     socket.on('receive vote', (option: string) =>
@@ -89,7 +91,7 @@ const Poll: React.FC<{
     return () => {
       socket.close()
     }
-  }, [poll_id])
+  }, [poll_id, router])
 
   return (
     <Main>
