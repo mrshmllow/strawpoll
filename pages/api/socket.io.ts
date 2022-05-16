@@ -29,6 +29,8 @@ export default async function handler(
     io.on("connection", (socket) => {
       const address = socket.handshake.address
 
+      socket.on("join", (poll: string) => socket.join(`poll:${poll}`))
+
       socket.on("vote", async (option: string) => {
         const { data, error } = await adminSupabase
           .from<IOption>('options')
@@ -63,7 +65,7 @@ export default async function handler(
           }),
         ])
 
-        io.emit("receive vote", option)
+        io.to(`poll:${data.owner}`).emit("receive vote", option)
         socket.emit("return")
       })
     });

@@ -15,6 +15,7 @@ import { Button, Main } from '../components/Primitives'
 import dayjs from '../lib/dayjs'
 import { colours } from '../lib/colours/colours'
 import { io, Socket } from 'socket.io-client'
+import { useRouter } from 'next/router'
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -27,6 +28,7 @@ const Poll: React.FC<{
 }> = ({ poll, inital_options, inital_voted }) => {
   const [options, setOptions] = useState(inital_options)
   const [socket, setSocket] = useState<Socket>(null!)
+  const { poll_id } = useRouter().query as route
 
   // useSubscription<IOption>(
   //   payload => {
@@ -57,12 +59,13 @@ const Poll: React.FC<{
     })
 
     socket.on('connect', () => {
+      socket.emit('join', poll_id)
       console.log('connected')
     })
 
     socket.on('receive vote', (option: string) =>
       setOptions(options => {
-        console.log("receibe")
+        console.log("recieved vote")
         const copy = [...options]
         const index = options.findIndex(find => find.id === option)
         copy[index] = {
@@ -152,7 +155,6 @@ const Poll: React.FC<{
                 // todo make proper loading
                 setLoading(true)
                 socket.emit('vote', selected)
-                setLoading(false)
               }}
               loadingText="Voting...">
               {!selected ? (
