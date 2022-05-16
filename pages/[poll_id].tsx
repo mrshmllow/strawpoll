@@ -28,6 +28,7 @@ const Poll: React.FC<{
 }> = ({ poll, inital_options, inital_voted }) => {
   const [options, setOptions] = useState(inital_options)
   const [socket, setSocket] = useState<Socket>(null!)
+  const [status, setStatus] = useState<"Live" | "Disconnected" | "Connecting...">("Connecting...")
   const { poll_id } = useRouter().query as route
 
   // useSubscription<IOption>(
@@ -60,8 +61,10 @@ const Poll: React.FC<{
 
     socket.on('connect', () => {
       socket.emit('join', poll_id)
-      console.log('connected')
+      setStatus("Live")
     })
+
+    socket.on("disconnect", () => setStatus("Disconnected"))
 
     socket.on('receive vote', (option: string) =>
       setOptions(options => {
@@ -86,7 +89,7 @@ const Poll: React.FC<{
     return () => {
       socket.close()
     }
-  }, [])
+  }, [poll_id])
 
   return (
     <Main>
@@ -138,7 +141,7 @@ const Poll: React.FC<{
           <div className="flex justify-between">
             <span>
               <FontAwesomeIcon className="mr-2 " icon={faBolt} />
-              Live
+              {status}
             </span>
             <span>
               IP Protected
