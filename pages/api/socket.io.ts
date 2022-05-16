@@ -38,7 +38,7 @@ export default async function handler(
 
     io.on('connection', socket => {
       const address = socket.handshake.headers['x-forwarded-for']
-        ? (socket.handshake.headers['x-forwarded-for'] as string)
+        ? (socket.handshake.headers['x-forwarded-for'] as string).split(',')[0]
         : socket.handshake.address
 
       socket.on('join', (poll: string) => socket.join(`poll:${poll}`))
