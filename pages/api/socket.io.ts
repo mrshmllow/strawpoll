@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import { Server as NetServer } from "http";
 import { IOption, IVote } from "../../types/tables";
 import { adminSupabase } from "../../lib/adminSupabaseClient";
+import { Socket as NetSocket } from "net";
 
 export type NextApiResponseServerIO = NextApiResponse & {
-  socket: Socket & {
+  socket: NetSocket & {
     server: NetServer & {
       io: Server;
     };
@@ -16,12 +17,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponseServerIO
 ) {
-  console.log("hello")
-  // @ts-ignore
   if (!res.socket.server.io) {
     console.log("New Socket.io server...");
+
     // adapt Next's net Server to http Server
-    // @ts-ignore
     const httpServer: NetServer = res.socket.server as any;
     const io = new Server(httpServer, {
       path: "/api/socket.io/",
@@ -69,8 +68,6 @@ export default async function handler(
       })
     });
 
-
-    // @ts-ignore
     res.socket.server.io = io
   }
   res.end();
