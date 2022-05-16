@@ -1,6 +1,3 @@
-const BundleAnalyzerPlugin =
-  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -19,12 +16,15 @@ const nextConfig = {
     // }
 
     if (process.env.ANALYZE) {
-     config.plugins.push(
-       new BundleAnalyzerPlugin({
-         analyzerMode: 'server',
-         analyzerPort: isServer ? 9999 : 9999,
-         openAnalyzer: true,
-       })
+      const BundleAnalyzerPlugin =
+        require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'server',
+          analyzerPort: isServer ? 9999 : 9999,
+          openAnalyzer: true,
+        })
       )
     }
 
