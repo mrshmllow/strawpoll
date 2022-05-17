@@ -16,6 +16,8 @@ import dayjs from '../lib/dayjs'
 import { colours } from '../lib/colours/colours'
 import { io, Socket } from 'socket.io-client'
 import { useRouter } from 'next/router'
+import { set as setCookie } from 'tiny-cookie'
+import { PostgrestFilterBuilder } from '@supabase/postgrest-js'
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -33,21 +35,6 @@ const Poll: React.FC<{
   >('Connecting...')
   const router = useRouter()
   const { poll_id } = router.query as route
-
-  // useSubscription<IOption>(
-  //   payload => {
-  //     setOptions(prevOptions => {
-  //       const foundIndex = options.findIndex(x => x.id == payload.new.id)
-  //       const copy = prevOptions.slice()
-  //       copy[foundIndex] = payload.new
-  //       return copy
-  //     })
-  //   },
-  //   {
-  //     event: 'UPDATE',
-  //     table: `options:owner=eq.${poll_id}`,
-  //   }
-  // )
 
   const total_votes = useMemo(
     () => options.reduce((prev, option) => prev + option.votes, 0),
@@ -72,7 +59,6 @@ const Poll: React.FC<{
 
     socket.on('receive vote', (option: string) =>
       setOptions(options => {
-        console.log('recieved vote')
         const copy = [...options]
         const index = options.findIndex(find => find.id === option)
         copy[index] = {
@@ -85,6 +71,14 @@ const Poll: React.FC<{
     )
 
     socket.on('return', () => {
+      const now = new Date()
+      // a week
+      now.setDate(now.getDate() + 1 * 7)
+
+      setCookie('voted', 'true', {
+        expires: now.toUTCString(),
+        path: `/${poll_id}`,
+      })
       setVoted(true)
     })
 
@@ -193,6 +187,8 @@ const supabase = adminSupabase
 export const getServerSideProps: GetServerSideProps = async context => {
   const { poll_id } = context.query as route
   const ip = getClientIp(context.req)
+  const { voted: cookieVoted } = context.req.cookies
+  const voted = cookieVoted === 'true'
 
   const [polls_query, options_query, ip_query] = await Promise.all([
     supabase
@@ -203,13 +199,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
       .from<IOption>('options')
       .select('option,id,votes')
       .filter('owner', 'eq', poll_id),
-    supabase
-      .from<IVote>('votes')
-      .select('choice')
-      .filter('poll_id', 'eq', poll_id)
-      .filter('ip', 'eq', ip)
-      .limit(1)
-      .single(),
+    cookieVoted === undefined
+      ? supabase
+          .from<IVote>('votes')
+          .select('choice')
+          .filter('poll_id', 'eq', poll_id)
+          .filter('ip', 'eq', ip)
+          .limit(1)
+          .single()
+      : null,
   ])
 
   if (
@@ -226,7 +224,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     props: {
       poll: polls_query.body[0],
       inital_options: options_query.body,
-      inital_voted: ip_query.data !== null,
+      inital_voted: cookieVoted !== undefined ? voted : ip_query!.data !== null,
     },
   }
 }
