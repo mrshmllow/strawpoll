@@ -20,7 +20,9 @@ export default async function handler(
     options?: string[]
   }
 
-  options = options && options.filter(option => option.length > 0 && option.length <= 70)
+  options =
+    options &&
+    options.filter(option => option.length > 0 && option.length <= 70)
 
   if (
     options === undefined ||

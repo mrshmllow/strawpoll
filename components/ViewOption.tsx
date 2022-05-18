@@ -16,9 +16,7 @@ const ViewOption: React.FC<{
     <div role="listitem">
       <div
         className={`flex justify-between text-${colour}-700 dark:text-slate-200 font-medium mb-1 gap-2 items-center`}>
-        <span className="text-lg sm:text-2xl break-all">
-          {option.option}
-        </span>
+        <span className="text-lg sm:text-2xl break-all">{option.option}</span>
         <span className="text-sm sm:text-lg w-fit">{width}</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
