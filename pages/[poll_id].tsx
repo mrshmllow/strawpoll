@@ -17,7 +17,6 @@ import { colours } from '../lib/colours/colours'
 import { io, Socket } from 'socket.io-client'
 import { useRouter } from 'next/router'
 import { set as setCookie } from 'tiny-cookie'
-import { PostgrestFilterBuilder } from '@supabase/postgrest-js'
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -183,7 +182,6 @@ const Poll: React.FC<{
   )
 }
 
-const supabase = adminSupabase
 export const getServerSideProps: GetServerSideProps = async context => {
   const { poll_id } = context.query as route
   const ip = getClientIp(context.req)
@@ -191,16 +189,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const voted = cookieVoted === 'true'
 
   const [polls_query, options_query, ip_query] = await Promise.all([
-    supabase
+    adminSupabase
       .from<IPoll>('polls')
       .select('question,created_at,colour')
       .filter('id', 'eq', poll_id),
-    supabase
+    adminSupabase
       .from<IOption>('options')
       .select('option,id,votes')
       .filter('owner', 'eq', poll_id),
     cookieVoted === undefined
-      ? supabase
+      ? adminSupabase
           .from<IVote>('votes')
           .select('choice')
           .filter('poll_id', 'eq', poll_id)
