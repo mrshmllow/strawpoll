@@ -53,31 +53,16 @@ export default async function handler(
 
         if (error || data === null) return
 
-        const { data: check } = await adminSupabase
-          .from<IVote>('votes')
-          .select('ip,poll_id')
-          .limit(1)
-          .filter('poll_id', 'eq', data.owner)
-          .filter('ip', 'eq', address)
-          .single()
+        const vote = await adminSupabase.from<IVote>('votes').insert({
+          ip: address,
+          choice: option,
+          poll_id: data.owner,
+        })
 
-        if (check !== null) return
+        // There is probably a conflict, inwhich case ignore
+        if (vote.error === null)
+          io.to(`poll:${data.owner}`).emit('receive vote', option)
 
-        await Promise.all([
-          adminSupabase
-            .from<IOption>('options')
-            .update({
-              votes: data.votes + 1,
-            })
-            .filter('id', 'eq', option),
-          adminSupabase.from<IVote>('votes').insert({
-            ip: address,
-            choice: option,
-            poll_id: data.owner,
-          }),
-        ])
-
-        io.to(`poll:${data.owner}`).emit('receive vote', option)
         socket.emit('return')
       })
     })
