@@ -19,6 +19,7 @@ import { useRouter } from "next/router"
 import { set as setCookie } from "tiny-cookie"
 import HCaptcha from "@hcaptcha/react-hcaptcha"
 import { useTheme } from "next-themes"
+import Link from "next/link"
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -193,13 +194,23 @@ const Poll: React.FC<{
                 `Vote ${options.find(option => option.id === selected)!.option}`
               )}
             </Button>
-            <span>
-              <FontAwesomeIcon className="mr-2" icon={faLock} />
-              Your IP is saved for protection
-            </span>
+
+            <p className="flex flex-col">
+              <span>
+                <FontAwesomeIcon className="mr-2" icon={faLock} />
+                Your IP is saved for protection
+              </span>
+
+              <span className="flex justify-center gap-1">
+                Read the
+                <Link href="/privacy">
+                  <a className="underline">privacy policy</a>
+                </Link>
+              </span>
+            </p>
 
             <button
-              className="flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 text-blue-700 dark:text-blue-500"
               onClick={() => setVoted(true)}>
               Jump to results
               <FontAwesomeIcon icon={faArrowRight} />

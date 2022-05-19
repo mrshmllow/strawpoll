@@ -1,5 +1,6 @@
 import type { NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import pluralize from "pluralize"
 import { useMemo, useRef, useState } from "react"
@@ -159,7 +160,18 @@ const Home: NextPage = () => {
         </Button>
       </form>
 
-      <span>Polls are hCaptcha and IP protected</span>
+      <p className="flex flex-col">
+        <span>
+          Polls are hCaptcha and IP protected.
+        </span>
+
+        <span className="flex justify-center gap-1">
+          Read the
+          <Link href="/privacy">
+            <a className="underline">privacy policy</a>
+          </Link>
+        </span>
+      </p>
     </Main>
   )
 }
