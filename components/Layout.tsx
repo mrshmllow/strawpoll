@@ -45,7 +45,7 @@ const Layout: React.FC<{ children: ReactElement }> = ({ children }) => {
         </span>
 
         <Link href="https://github.com/mrshmllow/strawpoll">
-          <a>
+          <a target="_blank">
             Fork
             <FontAwesomeIcon className="ml-1" icon={faGithub} />
           </a>
