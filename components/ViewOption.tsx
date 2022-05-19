@@ -8,7 +8,7 @@ const ViewOption: React.FC<{
   colour: string
 }> = ({ option, max, colour }) => {
   const width = useMemo(() => {
-    const number = (100 * option.votes) / max
+    const number = option.votes === 0 ? option.votes : (100 * option.votes) / max
     return `${number === NaN ? 0 : number.toFixed(0)}%`
   }, [option.votes, max])
 
