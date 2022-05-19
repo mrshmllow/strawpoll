@@ -55,7 +55,7 @@ export default async function handler(
             method: "POST",
           })
 
-          if ((await response.json())["success"] === true) return
+          if ((await response.json())["success"] === "true") return
 
           const { data, error } = await adminSupabase
             .from<IOption>("options")
