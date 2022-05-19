@@ -1,8 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ReactElement, useEffect, useState } from "react"
 import { useTheme } from "next-themes"
-import { faCog, faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
+import {
+  faCog,
+  faHeart,
+  faMoon,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
+import { faGithub } from "@fortawesome/free-brands-svg-icons"
 
 const Layout: React.FC<{ children: ReactElement }> = ({ children }) => {
   const [mounted, setMounted] = useState(false)
@@ -13,8 +19,8 @@ const Layout: React.FC<{ children: ReactElement }> = ({ children }) => {
   }, [theme])
 
   return (
-    <>
-      <header className="m-auto flex items-center justify-between p-2 sm:w-11/12 md:w-3/5 lg:w-2/5">
+    <div className="flex min-h-screen flex-col">
+      <header className="mx-auto flex w-full items-center justify-between p-2 sm:w-11/12 md:w-3/5 lg:w-2/5">
         <Link href="/">
           <a className="text-2xl font-extrabold text-slate-900 dark:text-slate-200 sm:text-3xl">
             Strawpoll
@@ -32,7 +38,20 @@ const Layout: React.FC<{ children: ReactElement }> = ({ children }) => {
         </button>
       </header>
       {children}
-    </>
+      <footer className="mx-auto mt-auto flex w-full justify-between p-2 pb-4 sm:w-11/12 md:w-3/5 lg:w-2/5">
+        <span>
+          Made with
+          <FontAwesomeIcon className="ml-1" icon={faHeart} />
+        </span>
+
+        <Link href="https://github.com/mrshmllow/strawpoll">
+          <a>
+            Fork
+            <FontAwesomeIcon className="ml-1" icon={faGithub} />
+          </a>
+        </Link>
+      </footer>
+    </div>
   )
 }
 

@@ -10,7 +10,9 @@ import {
 } from "react"
 
 export const Main: React.FC<{ children: ReactNode }> = ({ children }) => (
-  <main className="m-auto px-2 sm:w-11/12 md:w-3/5 lg:w-2/5">{children}</main>
+  <main className="mx-auto w-full px-2 sm:w-11/12 md:w-3/5 lg:w-2/5">
+    {children}
+  </main>
 )
 
 export const Hr: React.FC = () => (

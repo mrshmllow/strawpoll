@@ -161,9 +161,7 @@ const Home: NextPage = () => {
       </form>
 
       <p className="flex flex-col">
-        <span>
-          Polls are hCaptcha and IP protected.
-        </span>
+        <span>Polls are hCaptcha and IP protected.</span>
 
         <span className="flex justify-center gap-1">
           Read the
