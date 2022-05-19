@@ -130,7 +130,7 @@ const Poll: React.FC<{
           <TimeSince time={dayjs(poll.created_at)} />
         </div>
 
-        <hr className="my-1 border-slate-500 dark:border-slate-400" />
+        <Hr />
 
         <div
           className="grid auto-rows-auto gap-2"

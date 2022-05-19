@@ -13,6 +13,10 @@ export const Main: React.FC<{ children: ReactNode }> = ({ children }) => (
   <main className="m-auto px-2 sm:w-11/12 md:w-3/5 lg:w-2/5">{children}</main>
 )
 
+export const Hr: React.FC = () => (
+  <hr className="my-1 border-slate-500 dark:border-slate-400" />
+)
+
 export const Button: React.FC<
   {
     children: ReactNode
