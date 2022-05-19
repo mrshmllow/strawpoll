@@ -28,7 +28,7 @@ export const Button: React.FC<
   return (
     <button
       {...props}
-      className="break-all rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-slate-700"
+      className="break-all rounded-lg bg-blue-700 disabled:bg-slate-500 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-slate-700"
       disabled={props.disabled || loading}
       onClick={e => {
         props.onClick && props.onClick(e)
