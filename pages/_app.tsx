@@ -1,6 +1,5 @@
 import "../styles/globals.css"
 import type { AppProps } from "next/app"
-// import { Provider } from 'react-supabase'
 import { LazyMotion } from "framer-motion"
 import { NextPageWithLayout } from "../lib/types"
 import Layout from "../components/Layout"
@@ -22,7 +21,6 @@ const loadFeatures = () =>
   import("../lib/motionFeatures.js").then(res => res.default)
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => (
-  // <Provider value={supabase}>
   <LazyMotion features={loadFeatures}>
     <ThemeProvider attribute="class">
       <Head>
@@ -34,7 +32,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => (
       </Layout>
     </ThemeProvider>
   </LazyMotion>
-  // </Provider>
 )
 
 export default App
