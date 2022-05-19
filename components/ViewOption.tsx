@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
-import { IOption } from '../types/tables'
-import { m } from 'framer-motion'
+import { useMemo } from "react"
+import { IOption } from "../types/tables"
+import { m } from "framer-motion"
 
 const ViewOption: React.FC<{
   option: IOption
@@ -24,7 +24,7 @@ const ViewOption: React.FC<{
           className={`bg-${colour}-600 h-2.5 rounded-full transition`}
           animate={{ width }}
           initial={{ width: 0 }}
-          transition={{ ease: 'easeInOut' }}></m.div>
+          transition={{ ease: "easeInOut" }}></m.div>
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
-import dayjs from '../lib/dayjs'
-import { useEffect, useState } from 'react'
+import dayjs from "../lib/dayjs"
+import { useEffect, useState } from "react"
 
 const TimeSince: React.FC<{ time: dayjs.Dayjs }> = ({ time }) => {
   const [_, setCount] = useState(0)

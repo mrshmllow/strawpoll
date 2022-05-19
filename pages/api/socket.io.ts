@@ -1,11 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { Server } from 'socket.io'
-import { Server as NetServer } from 'http'
-import { IOption, IVote } from '../../types/tables'
-import { adminSupabase } from '../../lib/adminSupabaseClient'
-import { Socket as NetSocket } from 'net'
-import { createClient } from 'redis'
-import { createAdapter } from '@socket.io/redis-adapter'
+import { NextApiRequest, NextApiResponse } from "next"
+import { Server } from "socket.io"
+import { Server as NetServer } from "http"
+import { IOption, IVote } from "../../types/tables"
+import { adminSupabase } from "../../lib/adminSupabaseClient"
+import { Socket as NetSocket } from "net"
+import { createClient } from "redis"
+import { createAdapter } from "@socket.io/redis-adapter"
 
 export type NextApiResponseServerIO = NextApiResponse & {
   socket: NetSocket & {
@@ -23,7 +23,7 @@ export default async function handler(
     // adapt Next's net Server to http Server
     const httpServer: NetServer = res.socket.server as any
     const io = new Server(httpServer, {
-      path: '/api/socket.io/',
+      path: "/api/socket.io/",
     })
 
     // Connect to redis for subpub
@@ -36,24 +36,24 @@ export default async function handler(
       io.adapter(createAdapter(pubClient, subClient))
     })
 
-    io.on('connection', socket => {
-      const address = socket.handshake.headers['x-forwarded-for']
-        ? (socket.handshake.headers['x-forwarded-for'] as string).split(',')[0]
+    io.on("connection", socket => {
+      const address = socket.handshake.headers["x-forwarded-for"]
+        ? (socket.handshake.headers["x-forwarded-for"] as string).split(",")[0]
         : socket.handshake.address
 
-      socket.on('join', (poll: string) => socket.join(`poll:${poll}`))
+      socket.on("join", (poll: string) => socket.join(`poll:${poll}`))
 
-      socket.on('vote', async (option: string) => {
+      socket.on("vote", async (option: string) => {
         const { data, error } = await adminSupabase
-          .from<IOption>('options')
-          .select('id,votes,owner')
+          .from<IOption>("options")
+          .select("id,votes,owner")
           .limit(1)
-          .filter('id', 'eq', option)
+          .filter("id", "eq", option)
           .single()
 
         if (error || data === null) return
 
-        const vote = await adminSupabase.from<IVote>('votes').insert({
+        const vote = await adminSupabase.from<IVote>("votes").insert({
           ip: address,
           choice: option,
           poll_id: data.owner,
@@ -61,9 +61,9 @@ export default async function handler(
 
         // There is probably a conflict, inwhich case ignore
         if (vote.error === null)
-          io.to(`poll:${data.owner}`).emit('receive vote', option)
+          io.to(`poll:${data.owner}`).emit("receive vote", option)
 
-        socket.emit('return')
+        socket.emit("return")
       })
     })
 

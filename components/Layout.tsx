@@ -1,8 +1,8 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ReactElement, useEffect, useState } from 'react'
-import { useTheme } from 'next-themes'
-import { faCog, faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
-import Link from 'next/link'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { ReactElement, useEffect, useState } from "react"
+import { useTheme } from "next-themes"
+import { faCog, faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
+import Link from "next/link"
 
 const Layout: React.FC<{ children: ReactElement }> = ({ children }) => {
   const [mounted, setMounted] = useState(false)
@@ -21,12 +21,12 @@ const Layout: React.FC<{ children: ReactElement }> = ({ children }) => {
           </a>
         </Link>
         <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className="rounded-lg border border-gray-200 py-2.5 px-2.5 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
           <FontAwesomeIcon
             size="lg"
             className="mr-2"
-            icon={!mounted ? faCog : resolvedTheme === 'light' ? faSun : faMoon}
+            icon={!mounted ? faCog : resolvedTheme === "light" ? faSun : faMoon}
           />
           Change Theme
         </button>

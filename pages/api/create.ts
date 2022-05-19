@@ -1,8 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import shortUUID from 'short-uuid'
-import { adminSupabase } from '../../lib/adminSupabaseClient'
-import { IOption, IPoll } from '../../types/tables'
-import * as colours from '../../lib/colours/colours'
+import { NextApiRequest, NextApiResponse } from "next"
+import shortUUID from "short-uuid"
+import { adminSupabase } from "../../lib/adminSupabaseClient"
+import { IOption, IPoll } from "../../types/tables"
+import * as colours from "../../lib/colours/colours"
 
 const short = shortUUID()
 
@@ -28,17 +28,17 @@ export default async function handler(
     options === undefined ||
     !Array.isArray(options) ||
     options.length < 2 ||
-    typeof question !== 'string' ||
+    typeof question !== "string" ||
     question.length > 70
   ) {
     return res.status(400).json({
-      error: 'Invalid data',
+      error: "Invalid data",
       url: null,
     })
   }
 
   const { data: poll } = await adminSupabase
-    .from<IPoll>('polls')
+    .from<IPoll>("polls")
     .insert([
       {
         id: short.new(),
@@ -48,11 +48,11 @@ export default async function handler(
       },
     ])
     .limit(1)
-    .select('id')
+    .select("id")
     .single()
 
   await adminSupabase
-    .from<IOption>('options')
+    .from<IOption>("options")
     .insert(
       options.map(option => ({
         id: short.new(),
@@ -61,7 +61,7 @@ export default async function handler(
         votes: 0,
       }))
     )
-    .select('id')
+    .select("id")
 
   return res.status(200).json({
     error: null,

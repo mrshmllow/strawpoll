@@ -1,37 +1,37 @@
-import { GetServerSideProps } from 'next'
-import { ParsedUrlQuery } from 'querystring'
-import { IOption, IPoll, IVote } from '../types/tables'
-import { useEffect, useMemo, useState } from 'react'
-import ViewOption from '../components/ViewOption'
-import pluralize from 'pluralize'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faBolt, faLock } from '@fortawesome/free-solid-svg-icons'
-import VoteOption from '../components/VoteOption'
-import { getClientIp } from 'request-ip'
-import { adminSupabase } from '../lib/adminSupabaseClient'
-import TimeSince from '../components/TimeSince'
-import Head from 'next/head'
-import { Button, Main } from '../components/Primitives'
-import dayjs from '../lib/dayjs'
-import { colours } from '../lib/colours/colours'
-import { io, Socket } from 'socket.io-client'
-import { useRouter } from 'next/router'
-import { set as setCookie } from 'tiny-cookie'
+import { GetServerSideProps } from "next"
+import { ParsedUrlQuery } from "querystring"
+import { IOption, IPoll, IVote } from "../types/tables"
+import { useEffect, useMemo, useState } from "react"
+import ViewOption from "../components/ViewOption"
+import pluralize from "pluralize"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faArrowRight, faBolt, faLock } from "@fortawesome/free-solid-svg-icons"
+import VoteOption from "../components/VoteOption"
+import { getClientIp } from "request-ip"
+import { adminSupabase } from "../lib/adminSupabaseClient"
+import TimeSince from "../components/TimeSince"
+import Head from "next/head"
+import { Button, Main } from "../components/Primitives"
+import dayjs from "../lib/dayjs"
+import { colours } from "../lib/colours/colours"
+import { io, Socket } from "socket.io-client"
+import { useRouter } from "next/router"
+import { set as setCookie } from "tiny-cookie"
 
 type route = ParsedUrlQuery & {
   poll_id: string
 }
 
 const Poll: React.FC<{
-  poll: Pick<IPoll, 'question' | 'created_at' | 'colour'>
+  poll: Pick<IPoll, "question" | "created_at" | "colour">
   inital_options: IOption[]
   inital_voted: boolean
 }> = ({ poll, inital_options, inital_voted }) => {
   const [options, setOptions] = useState(inital_options)
   const [socket, setSocket] = useState<Socket>(null!)
   const [status, setStatus] = useState<
-    'Live' | 'Disconnected' | 'Connecting...'
-  >('Connecting...')
+    "Live" | "Disconnected" | "Connecting..."
+  >("Connecting...")
   const router = useRouter()
   const { poll_id } = router.query as route
 
@@ -45,18 +45,18 @@ const Poll: React.FC<{
   useEffect(() => {
     const socket = io({
       withCredentials: true,
-      path: '/api/socket.io/',
+      path: "/api/socket.io/",
     })
 
-    socket.on('connect', () => {
-      socket.emit('join', poll_id)
-      setStatus('Live')
+    socket.on("connect", () => {
+      socket.emit("join", poll_id)
+      setStatus("Live")
     })
 
-    socket.io.on('reconnect', () => router.reload())
-    socket.on('disconnect', () => setStatus('Disconnected'))
+    socket.io.on("reconnect", () => router.reload())
+    socket.on("disconnect", () => setStatus("Disconnected"))
 
-    socket.on('receive vote', (option: string) =>
+    socket.on("receive vote", (option: string) =>
       setOptions(options => {
         const copy = [...options]
         const index = options.findIndex(find => find.id === option)
@@ -69,12 +69,12 @@ const Poll: React.FC<{
       })
     )
 
-    socket.on('return', () => {
+    socket.on("return", () => {
       const now = new Date()
       // a week
       now.setDate(now.getDate() + 1 * 7)
 
-      setCookie('voted', 'true', {
+      setCookie("voted", "true", {
         expires: now.toUTCString(),
         path: `/${poll_id}`,
       })
@@ -107,7 +107,7 @@ const Poll: React.FC<{
         </div>
 
         <div className="flex justify-between sm:text-lg">
-          <span>{pluralize('votes', total_votes, true)}</span>
+          <span>{pluralize("votes", total_votes, true)}</span>
           <TimeSince time={dayjs(poll.created_at)} />
         </div>
 
@@ -115,7 +115,7 @@ const Poll: React.FC<{
 
         <div
           className="grid auto-rows-auto gap-2"
-          role={voted ? 'listbox' : 'radiogroup'}>
+          role={voted ? "listbox" : "radiogroup"}>
           {options.map((option, index) =>
             voted ? (
               <ViewOption
@@ -155,7 +155,7 @@ const Poll: React.FC<{
 
                 // todo make proper loading
                 setLoading(true)
-                socket.emit('vote', selected)
+                socket.emit("vote", selected)
               }}
               loadingText="Voting...">
               {!selected ? (
@@ -186,23 +186,23 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const { poll_id } = context.query as route
   const ip = getClientIp(context.req)
   const { voted: cookieVoted } = context.req.cookies
-  const voted = cookieVoted === 'true'
+  const voted = cookieVoted === "true"
 
   const [polls_query, options_query, ip_query] = await Promise.all([
     adminSupabase
-      .from<IPoll>('polls')
-      .select('question,created_at,colour')
-      .filter('id', 'eq', poll_id),
+      .from<IPoll>("polls")
+      .select("question,created_at,colour")
+      .filter("id", "eq", poll_id),
     adminSupabase
-      .from<IOption>('options')
-      .select('option,id,votes')
-      .filter('owner', 'eq', poll_id),
+      .from<IOption>("options")
+      .select("option,id,votes")
+      .filter("owner", "eq", poll_id),
     cookieVoted === undefined
       ? adminSupabase
-          .from<IVote>('votes')
-          .select('choice')
-          .filter('poll_id', 'eq', poll_id)
-          .filter('ip', 'eq', ip)
+          .from<IVote>("votes")
+          .select("choice")
+          .filter("poll_id", "eq", poll_id)
+          .filter("ip", "eq", ip)
           .limit(1)
           .single()
       : null,

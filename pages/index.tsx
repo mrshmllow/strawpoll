@@ -1,27 +1,27 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import pluralize from 'pluralize'
-import { useMemo, useRef, useState } from 'react'
-import shortUUID from 'short-uuid'
-import { Button, Main } from '../components/Primitives'
-import { nth } from '../lib/english'
-import { CreateReturn } from './api/create'
+import type { NextPage } from "next"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import pluralize from "pluralize"
+import { useMemo, useRef, useState } from "react"
+import shortUUID from "short-uuid"
+import { Button, Main } from "../components/Primitives"
+import { nth } from "../lib/english"
+import { CreateReturn } from "./api/create"
 
 const short = shortUUID()
 
 const jokes = [
   {
-    question: 'Cats or Dogs?',
-    options: ['Cats!', 'Dogs!', 'Rats!?'],
+    question: "Cats or Dogs?",
+    options: ["Cats!", "Dogs!", "Rats!?"],
   },
 ]
 
 const Home: NextPage = () => {
   const titleRef = useRef<HTMLInputElement>(null!)
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState("")
   const [options, setOptions] = useState<{ id: string; option: string }[]>([
-    { id: 'imspecial', option: '' },
+    { id: "imspecial", option: "" },
   ])
   const useable = useMemo(
     () => options.filter(option => option.option.length > 0),
@@ -76,7 +76,7 @@ const Home: NextPage = () => {
                 jokes[0].options[index]
                   ? jokes[0].options[index]
                   : index === 9
-                  ? 'The final option'
+                  ? "The final option"
                   : `A ${index + 1}${nth(index + 1)} option`
               }
               onChange={e => {
@@ -86,7 +86,7 @@ const Home: NextPage = () => {
                     ...options,
                     {
                       id: short.new(),
-                      option: '',
+                      option: "",
                     },
                   ])
                 } else if (
@@ -123,9 +123,9 @@ const Home: NextPage = () => {
             e.preventDefault()
             setLoading(true)
             const fetched = await fetch(`/api/create`, {
-              method: 'POST',
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 question: title,
@@ -143,13 +143,13 @@ const Home: NextPage = () => {
           }}
           loadingText="Creating...">
           {title.length === 0
-            ? 'Add a title'
+            ? "Add a title"
             : useable.length < 2
             ? `Add ${2 - useable.length} more ${pluralize(
-                'option',
+                "option",
                 useable.length
               )}`
-            : 'Create'}
+            : "Create"}
         </Button>
       </form>
     </Main>

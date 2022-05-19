@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    runtime: 'nodejs',
+    runtime: "nodejs",
     serverComponents: true,
   },
   webpack: (config, { dev, isServer }) => {
@@ -17,11 +17,11 @@ const nextConfig = {
 
     if (process.env.ANALYZE) {
       const BundleAnalyzerPlugin =
-        require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+        require("webpack-bundle-analyzer").BundleAnalyzerPlugin
 
       config.plugins.push(
         new BundleAnalyzerPlugin({
-          analyzerMode: 'server',
+          analyzerMode: "server",
           analyzerPort: isServer ? 9999 : 9999,
           openAnalyzer: true,
         })
