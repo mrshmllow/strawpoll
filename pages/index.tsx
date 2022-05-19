@@ -41,13 +41,13 @@ const Home: NextPage = () => {
         <div>
           <label
             htmlFor="question"
-            className="block sm:text-lg font-extrabold text-slate-900 tracking-tight dark:text-slate-200 text-left">
+            className="block text-left font-extrabold tracking-tight text-slate-900 dark:text-slate-200 sm:text-lg">
             A question
           </label>
 
           <input
             type="text"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             autoComplete="off"
             placeholder="Cats vs Dogs"
             required
@@ -60,13 +60,13 @@ const Home: NextPage = () => {
         </div>
 
         <fieldset className="flex flex-col gap-2">
-          <legend className="sm:text-lg font-extrabold text-slate-900 tracking-tight dark:text-slate-200 text-left">
+          <legend className="text-left font-extrabold tracking-tight text-slate-900 dark:text-slate-200 sm:text-lg">
             Options
           </legend>
           {options.map((option, index) => (
             <input
               type="text"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none"
+              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               autoComplete="off"
               key={option.id}
               required={index <= 1}

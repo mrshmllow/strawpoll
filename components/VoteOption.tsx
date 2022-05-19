@@ -10,7 +10,7 @@ const VoteOption: React.FC<{
 }> = ({ option, selected, setSelected }) => {
   return (
     <button
-      className={`w-full text-blue-700 dark:text-slate-200 font-medium pr-2 py-2 transition-colors rounded-md flex items-center cursor-pointer text-lg sm:text-2xl break-all ${
+      className={`flex w-full cursor-pointer items-center break-all rounded-md py-2 pr-2 text-lg font-medium text-blue-700 transition-colors dark:text-slate-200 sm:text-2xl ${
         selected === option.id ? 'dark:bg-slate-800' : 'hover:dark:bg-slate-800'
       }`}
       onClick={() => setSelected(option.id)}

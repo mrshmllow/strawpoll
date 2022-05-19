@@ -101,7 +101,7 @@ const Poll: React.FC<{
       <div className="flex flex-col gap-2">
         <div>
           <span>Anonymous asks:</span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight break-all dark:text-slate-200">
+          <h1 className="break-all text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-200 sm:text-3xl">
             {poll.question}
           </h1>
         </div>
@@ -170,7 +170,7 @@ const Poll: React.FC<{
             </span>
 
             <button
-              className="flex items-center gap-2 justify-center"
+              className="flex items-center justify-center gap-2"
               onClick={() => setVoted(true)}>
               Jump to results
               <FontAwesomeIcon icon={faArrowRight} />
