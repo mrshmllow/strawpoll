@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next"
 import { ParsedUrlQuery } from "querystring"
 import { IOption, IPoll, IVote } from "../types/tables"
-import { useEffect, useMemo, useState } from "react"
+import { LegacyRef, useEffect, useMemo, useRef, useState } from "react"
 import ViewOption from "../components/ViewOption"
 import pluralize from "pluralize"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -11,12 +11,14 @@ import { getClientIp } from "request-ip"
 import { adminSupabase } from "../lib/adminSupabaseClient"
 import TimeSince from "../components/TimeSince"
 import Head from "next/head"
-import { Button, Main } from "../components/Primitives"
+import { Button, Hr, Main } from "../components/Primitives"
 import dayjs from "../lib/dayjs"
 import { colours } from "../lib/colours/colours"
 import { io, Socket } from "socket.io-client"
 import { useRouter } from "next/router"
 import { set as setCookie } from "tiny-cookie"
+import HCaptcha from "@hcaptcha/react-hcaptcha"
+import { useTheme } from "next-themes"
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -34,6 +36,10 @@ const Poll: React.FC<{
   >("Connecting...")
   const router = useRouter()
   const { poll_id } = router.query as route
+  const { resolvedTheme } = useTheme()
+
+  const [mounted, setMounted] = useState(false)
+  const hcaptchaRef = useRef<HCaptcha>(null!)
 
   const total_votes = useMemo(
     () => options.reduce((prev, option) => prev + option.votes, 0),
@@ -42,7 +48,10 @@ const Poll: React.FC<{
   const [voted, setVoted] = useState(inital_voted)
   const [selected, setSelected] = useState<string | undefined>(undefined)
 
+  useEffect(() => setMounted(true), [])
+
   useEffect(() => {
+    setMounted(true)
     const socket = io({
       withCredentials: true,
       path: "/api/socket.io/",
@@ -98,6 +107,16 @@ const Poll: React.FC<{
         />
       </Head>
 
+      {mounted && (
+        <HCaptcha
+          sitekey="260ec150-49db-4b56-93d6-62f867b9cdba"
+          theme={resolvedTheme as "light" | "dark" | undefined}
+          onVerify={() => {}}
+          ref={hcaptchaRef as LegacyRef<HCaptcha>}
+          size="invisible"
+        />
+      )}
+
       <div className="flex flex-col gap-2">
         <div>
           <span>Anonymous asks:</span>
@@ -152,10 +171,20 @@ const Poll: React.FC<{
               disabled={!selected}
               onClickLoad={async (e, setLoading) => {
                 e.preventDefault()
-
-                // todo make proper loading
                 setLoading(true)
-                socket.emit("vote", selected)
+
+                try {
+                  const token = await hcaptchaRef.current.execute({
+                    async: true,
+                  })
+
+                  socket.emit("vote", {
+                    selection: selected,
+                    token: token.response,
+                  })
+                } catch (e) {
+                  setLoading(false)
+                }
               }}
               loadingText="Voting...">
               {!selected ? (

@@ -43,28 +43,41 @@ export default async function handler(
 
       socket.on("join", (poll: string) => socket.join(`poll:${poll}`))
 
-      socket.on("vote", async (option: string) => {
-        const { data, error } = await adminSupabase
-          .from<IOption>("options")
-          .select("id,votes,owner")
-          .limit(1)
-          .filter("id", "eq", option)
-          .single()
+      socket.on(
+        "vote",
+        async ({ token, selection }: { selection: string; token: string }) => {
+          let url = new URL("https://hcaptcha.com/siteverify")
+          url.searchParams.set("secret", process.env.HCAPTCHA_SECRET!)
+          url.searchParams.set("response", token)
+          url.searchParams.set("remoteip", address)
 
-        if (error || data === null) return
+          const response = await fetch(url.toString(), {
+            method: "POST",
+          })
 
-        const vote = await adminSupabase.from<IVote>("votes").insert({
-          ip: address,
-          choice: option,
-          poll_id: data.owner,
-        })
+          if ((await response.json())["success"] === true) return
 
-        // There is probably a conflict, inwhich case ignore
-        if (vote.error === null)
-          io.to(`poll:${data.owner}`).emit("receive vote", option)
+          const { data, error } = await adminSupabase
+            .from<IOption>("options")
+            .select("id,votes,owner")
+            .limit(1)
+            .filter("id", "eq", selection)
+            .single()
 
-        socket.emit("return")
-      })
+          if (error || data === null) return
+
+          const vote = await adminSupabase.from<IVote>("votes").insert({
+            ip: address,
+            choice: selection,
+            poll_id: data.owner,
+          })
+
+          if (vote.error === null)
+            io.to(`poll:${data.owner}`).emit("receive vote", selection)
+
+          socket.emit("return")
+        }
+      )
     })
 
     res.socket.server.io = io

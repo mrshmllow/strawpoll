@@ -37,13 +37,13 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1 className="flex flex-col text-xl mb-2 sm:text-2xl text-slate-900 dark:text-slate-200">
+      <h1 className="mb-2 flex flex-col text-xl text-slate-900 dark:text-slate-200 sm:text-2xl">
         <span className="text-blue-700 dark:text-blue-500">Finally!</span>
         <span>A Friendly, OpenSource</span>
         <span>Strawpoll App</span>
       </h1>
 
-      <form className="flex flex-col gap-2">
+      <form className="mb-2 flex flex-col gap-2">
         <div>
           <label
             htmlFor="question"
@@ -158,6 +158,8 @@ const Home: NextPage = () => {
             : "Create"}
         </Button>
       </form>
+
+      <span>Polls are hCaptcha and IP protected</span>
     </Main>
   )
 }
