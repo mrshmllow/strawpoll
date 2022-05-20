@@ -108,16 +108,6 @@ const Poll: React.FC<{
         />
       </Head>
 
-      {mounted && (
-        <HCaptcha
-          sitekey="260ec150-49db-4b56-93d6-62f867b9cdba"
-          theme={resolvedTheme as "light" | "dark" | undefined}
-          onVerify={() => {}}
-          ref={hcaptchaRef as LegacyRef<HCaptcha>}
-          size="invisible"
-        />
-      )}
-
       <div className="flex flex-col gap-2">
         <div>
           <span>Anonymous asks:</span>
@@ -168,6 +158,16 @@ const Poll: React.FC<{
           </div>
         ) : (
           <>
+            {mounted && (
+              <HCaptcha
+                sitekey="260ec150-49db-4b56-93d6-62f867b9cdba"
+                theme={resolvedTheme as "light" | "dark" | undefined}
+                onVerify={() => {}}
+                ref={hcaptchaRef as LegacyRef<HCaptcha>}
+                size="invisible"
+              />
+            )}
+
             <Button
               disabled={!selected}
               onClickLoad={async (e, setLoading) => {
