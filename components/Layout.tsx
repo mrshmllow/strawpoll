@@ -5,6 +5,7 @@ import {
   faCog,
   faHeart,
   faMoon,
+  faMugHot,
   faSun,
 } from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
@@ -38,18 +39,30 @@ const Layout: React.FC<{ children: ReactElement }> = ({ children }) => {
         </button>
       </header>
       {children}
-      <footer className="mx-auto mt-auto flex w-full justify-between p-2 pb-4 sm:w-11/12 md:w-3/5 lg:w-2/5">
-        <span>
-          Made with
-          <FontAwesomeIcon className="ml-1" icon={faHeart} />
-        </span>
+      <footer className="mx-auto mt-auto w-full p-2 pb-4 sm:w-11/12 md:w-3/5 lg:w-2/5">
+        <div className="flex justify-between">
+          <span>
+            Made with
+            <FontAwesomeIcon className="ml-1" icon={faHeart} />
+          </span>
 
-        <Link href="https://github.com/mrshmllow/strawpoll">
-          <a target="_blank">
-            Fork
-            <FontAwesomeIcon className="ml-1" icon={faGithub} />
-          </a>
-        </Link>
+          <Link href="https://github.com/mrshmllow/strawpoll">
+            <a target="_blank">
+              Fork
+              <FontAwesomeIcon className="ml-1" icon={faGithub} />
+            </a>
+          </Link>
+        </div>
+
+        <div className="flex justify-between">
+          <Link href="/privacy">Privacy</Link>
+          <Link href="https://ko-fi.com/mrshmllow">
+            <a target="_blank">
+              Ko-Fi
+              <FontAwesomeIcon className="ml-1" icon={faMugHot} />
+            </a>
+          </Link>
+        </div>
       </footer>
     </div>
   )
