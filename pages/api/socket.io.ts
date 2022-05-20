@@ -6,6 +6,7 @@ import { adminSupabase } from "../../lib/adminSupabaseClient"
 import { Socket as NetSocket } from "net"
 import { createClient } from "redis"
 import { createAdapter } from "@socket.io/redis-adapter"
+import { parse } from "cookie"
 
 export type NextApiResponseServerIO = NextApiResponse & {
   socket: NetSocket & {
@@ -40,6 +41,7 @@ export default async function handler(
       const address = socket.handshake.headers["x-forwarded-for"]
         ? (socket.handshake.headers["x-forwarded-for"] as string).split(",")[0]
         : socket.handshake.address
+      const cookies = socket.handshake.headers["cookie"] !== undefined && parse(socket.handshake.headers["cookie"])
 
       socket.on("join", (poll: string) => socket.join(`poll:${poll}`))
 
@@ -65,6 +67,8 @@ export default async function handler(
             .single()
 
           if (error || data === null) return
+
+          if (cookies && cookies[data.owner] === "true") return socket.emit("return")
 
           const vote = await adminSupabase.from<IVote>("votes").insert({
             ip: address,

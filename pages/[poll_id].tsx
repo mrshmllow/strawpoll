@@ -84,9 +84,9 @@ const Poll: React.FC<{
       // a week
       now.setDate(now.getDate() + 1 * 7)
 
-      setCookie("voted", "true", {
+      setCookie(poll_id, "true", {
         expires: now.toUTCString(),
-        path: `/${poll_id}`,
+        path: `/`,
       })
       setVoted(true)
     })
@@ -225,7 +225,7 @@ const Poll: React.FC<{
 export const getServerSideProps: GetServerSideProps = async context => {
   const { poll_id } = context.query as route
   const ip = getClientIp(context.req)
-  const { voted: cookieVoted } = context.req.cookies
+  const cookieVoted = context.req.cookies[poll_id]
   const voted = cookieVoted === "true"
 
   const [polls_query, options_query, ip_query] = await Promise.all([
