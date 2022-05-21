@@ -21,6 +21,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 import absoluteUrl from "next-absolute-url"
+import { NextSeo } from "next-seo"
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -102,21 +103,28 @@ const Poll: React.FC<{
 
   return (
     <Main>
-      <Head>
-        <title>Vote on {poll.question} | Strawpoll</title>
-        <meta
-          name="description"
-          content={`Give your vote on '${poll.question}' on strawpoll.ink!`}
-        />
-        <meta property="og:image" content={image} />
-        <meta
-          property="og:image:alt"
-          content={`Preview of ${poll.question} at strawpoll.ink`}
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:type" content="website" />
-      </Head>
+      <NextSeo
+        title={`Vote on ${poll.question} on Strawpoll`}
+        description={`Give your vote on '${poll.question}' on strawpoll.ink!`}
+        canonical="https://strawpoll.ink/"
+        openGraph={{
+          url: `https://strawpoll.ink/${poll_id}`,
+          type: "website",
+          images: [
+            {
+              url: image,
+              width: 1200,
+              height: 630,
+              alt: `A preview of ${poll.question} at strawpoll.ink`,
+              type: "image/png"
+            }
+          ]
+        }}
+        twitter={{
+          handle: '@mrshmllow',
+          cardType: "summary_large_image"
+        }}
+      />
 
       <div className="flex flex-col gap-2">
         <div>
