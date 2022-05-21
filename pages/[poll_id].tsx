@@ -20,6 +20,7 @@ import { set as setCookie } from "tiny-cookie"
 import HCaptcha from "@hcaptcha/react-hcaptcha"
 import { useTheme } from "next-themes"
 import Link from "next/link"
+import absoluteUrl from "next-absolute-url"
 
 type route = ParsedUrlQuery & {
   poll_id: string
@@ -29,7 +30,8 @@ const Poll: React.FC<{
   poll: Pick<IPoll, "question" | "created_at" | "colour">
   inital_options: IOption[]
   inital_voted: boolean
-}> = ({ poll, inital_options, inital_voted }) => {
+  image: string
+}> = ({ poll, inital_options, inital_voted, image }) => {
   const [options, setOptions] = useState(inital_options)
   const [socket, setSocket] = useState<Socket>(null!)
   const [status, setStatus] = useState<
@@ -101,11 +103,19 @@ const Poll: React.FC<{
   return (
     <Main>
       <Head>
-        <title>{poll.question} | Strawpoll</title>
+        <title>Vote on {poll.question} | Strawpoll</title>
         <meta
           name="description"
-          content={`Give your vote on '${poll.question}'!`}
+          content={`Give your vote on '${poll.question}' on strawpoll.ink!`}
         />
+        <meta property="og:image" content={image} />
+        <meta
+          property="og:image:alt"
+          content={`Preview of ${poll.question} at strawpoll.ink`}
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:type" content="website" />
       </Head>
 
       <div className="flex flex-col gap-2">
@@ -227,12 +237,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const ip = getClientIp(context.req)
   const cookieVoted = context.req.cookies[poll_id]
   const voted = cookieVoted === "true"
+  const { origin } = absoluteUrl(context.req)
 
   const [polls_query, options_query, ip_query] = await Promise.all([
     adminSupabase
       .from<IPoll>("polls")
       .select("question,created_at,colour")
-      .filter("id", "eq", poll_id),
+      .filter("id", "eq", poll_id)
+      .limit(1)
+      .single(),
     adminSupabase
       .from<IOption>("options")
       .select("option,id,votes")
@@ -258,11 +271,21 @@ export const getServerSideProps: GetServerSideProps = async context => {
     }
   }
 
+  const image = `${origin}/api/opengraph.png?question=${
+    polls_query.data.question
+  }&max=${options_query.data.reduce(
+    (prev, option) => prev + option.votes,
+    0
+  )}${options_query.data
+    .map(option => `&options[]=${option.option};${option.votes}`)
+    .join("")}`
+
   return {
     props: {
-      poll: polls_query.body[0],
-      inital_options: options_query.body,
+      poll: polls_query.data,
+      inital_options: options_query.data,
       inital_voted: cookieVoted !== undefined ? voted : ip_query!.data !== null,
+      image,
     },
   }
 }
