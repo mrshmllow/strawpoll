@@ -9,6 +9,7 @@ import Router from "next/router"
 import NProgress from "nprogress"
 import "../styles/nprogress.css"
 import { ThemeProvider } from "next-themes"
+import { DefaultSeo } from "next-seo"
 config.autoAddCss = false
 
 type AppPropsWithLayout = AppProps & { Component: NextPageWithLayout }
@@ -26,6 +27,24 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => (
       <Head>
         <style>{dom.css()}</style>
       </Head>
+
+      <DefaultSeo
+        title="Strawpoll.ink: Create free & easy polls"
+        description="Create live polls on strawpoll.ink. Free and Open Source <3"
+        twitter={{
+          handle: "@mrshmllow",
+        }}
+        additionalLinkTags={[
+          {
+            rel: "icon",
+            href: "/favicon.ico",
+          },
+        ]}
+        openGraph={{
+          type: "website",
+          site_name: "Strawpoll.ink"
+        }}
+      />
 
       <Layout>
         <Component {...pageProps} />

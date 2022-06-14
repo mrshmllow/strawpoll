@@ -1,4 +1,5 @@
 import type { NextPage } from "next"
+import { NextSeo } from "next-seo"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -32,12 +33,6 @@ const Home: NextPage = () => {
 
   return (
     <Main>
-      <Head>
-        <title>Straw Poll</title>
-        <meta name="description" content="Create a new straw poll" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <h1 className="mb-2 flex flex-col text-xl text-slate-900 dark:text-slate-200 sm:text-2xl">
         <span className="text-blue-700 dark:text-blue-500">Finally!</span>
         <span>A Friendly, OpenSource</span>

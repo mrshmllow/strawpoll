@@ -1,12 +1,13 @@
-import Head from "next/head"
+import { NextSeo } from "next-seo"
 import { Hr, Main } from "../components/Primitives"
 
 const Privacy: React.FC = () => (
   <Main>
-    <Head>
-      <title>Strawpoll.ink Privacy</title>
-      <meta name="description" content="Strawpoll.ink privacy policy" />
-    </Head>
+    <NextSeo
+      title="Strawpoll.ink: Create free & easy polls"
+      description="Strawpoll.ink's privacy policy"
+    />
+
     <div className="flex flex-col gap-2 text-left">
       <h1 className="text-center text-2xl text-slate-900 dark:text-slate-200 sm:text-3xl">
         Privacy Policy

@@ -104,25 +104,23 @@ const Poll: React.FC<{
   return (
     <Main>
       <NextSeo
-        title={`Vote on ${poll.question} on Strawpoll`}
-        description={`Give your vote on '${poll.question}' on strawpoll.ink!`}
-        canonical="https://strawpoll.ink/"
+        title={`Vote on ${poll.question}`}
+        titleTemplate="%s | Strawpoll.ink"
+        description={`Give your vote on '${poll.question}' with Strawpoll.ink!`}
         openGraph={{
           url: `https://strawpoll.ink/${poll_id}`,
-          type: "website",
           images: [
             {
               url: image,
               width: 1200,
               height: 630,
               alt: `A preview of ${poll.question} at strawpoll.ink`,
-              type: "image/png"
-            }
-          ]
+              type: "image/png",
+            },
+          ],
         }}
         twitter={{
-          handle: '@mrshmllow',
-          cardType: "summary_large_image"
+          cardType: "summary_large_image",
         }}
       />
 
