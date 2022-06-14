@@ -4,8 +4,7 @@ import { Main } from "../components/Primitives"
 const NotFound = () => (
   <Main>
     <NextSeo
-      titleTemplate="%s Error | Strawpoll.ink"
-      title="404"
+      title="404 Error | Strawpoll.ink"
       description="Thats an error."
     />
 
