@@ -35,9 +35,7 @@ export default async function handler(
   }
 
   const trimmed_question =
-    question.length > 25
-      ? question.substring(0, 25 - 3) + "..."
-      : question
+    question.length > 25 ? question.substring(0, 25 - 3) + "..." : question
 
   const WIDTH = 1200 as const
   const HEIGHT = 630 as const
@@ -62,7 +60,11 @@ export default async function handler(
   ctx.font = '60px "Nunito Extrabold"'
   ctx.fillText(trimmed_question, 15, 40)
 
-  ctx.fillText(options.length > 4 ? "+ more at Strawpoll.ink" : "At Strawpoll.ink", 15, HEIGHT - 40)
+  ctx.fillText(
+    options.length > 4 ? "+ more at Strawpoll.ink" : "At Strawpoll.ink",
+    15,
+    HEIGHT - 40
+  )
 
   ctx.fillStyle = ALT_TEXT_COLOUR
   const total_votes_string = `${max} ${pluralize("votes", Number(max))}`
@@ -99,7 +101,7 @@ export default async function handler(
     ctx.strokeStyle = "#374151"
     ctx.lineCap = "round"
     ctx.lineWidth = 20
-    
+
     // Same here
     const length = WIDTH - padding * 2
     ctx.beginPath()
@@ -116,7 +118,9 @@ export default async function handler(
     )
     ctx.stroke()
 
-    const number = `${vote === 0 ? vote : ((100 * vote) / Number(max)).toFixed(0)}%`
+    const number = `${
+      vote === 0 ? vote : ((100 * vote) / Number(max)).toFixed(0)
+    }%`
     const voteString = `(${vote})`
 
     ctx.fillText(

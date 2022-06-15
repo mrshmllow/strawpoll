@@ -38,7 +38,7 @@ const ViewOption: React.FC<{
           src={
             supabase.storage.from("polls").getPublicUrl(option.image).publicURL!
           }
-          className="rounded-lg mt-2 mx-auto"
+          className="mx-auto mt-2 rounded-lg"
         />
       )}
     </div>

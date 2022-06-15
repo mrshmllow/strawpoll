@@ -42,7 +42,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => (
         ]}
         openGraph={{
           type: "website",
-          site_name: "Strawpoll.ink"
+          site_name: "Strawpoll.ink",
         }}
       />
 

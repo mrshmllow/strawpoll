@@ -79,7 +79,7 @@ export default async function handler(
         option: option.option,
         owner: poll!.id,
         votes: 0,
-        image: option.image && `${poll!.id}/${option.id}`
+        image: option.image && `${poll!.id}/${option.id}`,
       }))
     )
     .select("id")

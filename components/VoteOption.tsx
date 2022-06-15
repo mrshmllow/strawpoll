@@ -38,7 +38,7 @@ const VoteOption: React.FC<{
           src={
             supabase.storage.from("polls").getPublicUrl(option.image).publicURL!
           }
-          className="mt-2 mx-auto rounded-lg"
+          className="mx-auto mt-2 rounded-lg"
         />
       )}
     </button>

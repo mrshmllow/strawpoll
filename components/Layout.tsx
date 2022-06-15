@@ -39,7 +39,7 @@ const Layout: React.FC<{ children: ReactElement }> = ({ children }) => {
         </button>
       </header>
       {children}
-      <footer className="mx-auto mt-auto w-full flex flex-col gap-1 p-2 pb-4 sm:w-11/12 md:w-3/5 lg:w-2/5">
+      <footer className="mx-auto mt-auto flex w-full flex-col gap-1 p-2 pb-4 sm:w-11/12 md:w-3/5 lg:w-2/5">
         <div className="flex justify-between">
           <span>
             Made with
