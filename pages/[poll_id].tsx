@@ -254,7 +254,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
       .single(),
     adminSupabase
       .from<IOption>("options")
-      .select("option,id,votes")
+      .select("option,id,votes,image")
       .filter("owner", "eq", poll_id),
     cookieVoted === undefined
       ? adminSupabase

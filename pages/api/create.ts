@@ -3,12 +3,21 @@ import shortUUID from "short-uuid"
 import { adminSupabase } from "../../lib/adminSupabaseClient"
 import { IOption, IPoll } from "../../types/tables"
 import * as colours from "../../lib/colours/colours"
+import fetch, { Blob, File, Response } from "node-fetch"
+import { decode } from "base64-arraybuffer"
 
 const short = shortUUID()
 
 export interface CreateReturn {
   error: true | null | string
   url: string | null
+}
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "20mb",
+    },
+  },
 }
 
 export default async function handler(
@@ -17,12 +26,19 @@ export default async function handler(
 ) {
   let { question, options } = req.body as {
     question?: string
-    options?: string[]
+    options?: {
+      option: string
+      image?: string
+      contentType?: string
+      id: string
+    }[]
   }
 
   options =
     options &&
-    options.filter(option => option.length > 0 && option.length <= 70)
+    options.filter(
+      option => option.option.length > 0 && option.option.length <= 70
+    )
 
   if (
     options === undefined ||
@@ -51,17 +67,34 @@ export default async function handler(
     .select("id")
     .single()
 
+  options.forEach(option => {
+    option.id = short.new()
+  })
+
   await adminSupabase
     .from<IOption>("options")
     .insert(
       options.map(option => ({
-        id: short.new(),
-        option,
+        id: option.id,
+        option: option.option,
         owner: poll!.id,
         votes: 0,
+        image: option.image && `${poll!.id}/${option.id}.png`
       }))
     )
     .select("id")
+
+  Promise.all(
+    options
+      .filter(option => option.image)
+      .map(option =>
+        adminSupabase.storage
+          .from("polls")
+          .upload(`${poll!.id}/${option.id}.png`, decode(option.image!), {
+            contentType: option.contentType,
+          })
+      )
+  )
 
   return res.status(200).json({
     error: null,

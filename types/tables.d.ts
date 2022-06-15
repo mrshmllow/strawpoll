@@ -11,6 +11,7 @@ export interface IOption {
   option: string
   owner: string
   votes: number
+  image?: string
 }
 
 export interface IVote {

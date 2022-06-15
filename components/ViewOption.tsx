@@ -1,6 +1,7 @@
 import { useMemo } from "react"
 import { IOption } from "../types/tables"
 import { m } from "framer-motion"
+import { supabase } from "../lib/supabaseClient"
 
 const ViewOption: React.FC<{
   option: IOption
@@ -19,7 +20,10 @@ const ViewOption: React.FC<{
         className={`flex justify-between text-${colour}-700 mb-1 items-center gap-2 font-medium dark:text-slate-200`}>
         <span className="break-all text-lg sm:text-2xl">{option.option}</span>
         <span className="w-fit text-sm sm:text-lg">
-          {width} <span className="text-slate-500 dark:text-slate-400">{option.votes > 0 && `(${option.votes})`}</span>
+          {width}{" "}
+          <span className="text-slate-500 dark:text-slate-400">
+            {option.votes > 0 && `(${option.votes})`}
+          </span>
         </span>
       </div>
       <div className="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
@@ -29,6 +33,14 @@ const ViewOption: React.FC<{
           initial={{ width: 0 }}
           transition={{ ease: "easeInOut" }}></m.div>
       </div>
+      {option.image && (
+        <img
+          src={
+            supabase.storage.from("polls").getPublicUrl(option.image).publicURL!
+          }
+          className="rounded-lg mt-2"
+        />
+      )}
     </div>
   )
 }
