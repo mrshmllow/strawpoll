@@ -79,7 +79,7 @@ export default async function handler(
         option: option.option,
         owner: poll!.id,
         votes: 0,
-        image: option.image && `${poll!.id}/${option.id}.png`
+        image: option.image && `${poll!.id}/${option.id}`
       }))
     )
     .select("id")
@@ -90,7 +90,7 @@ export default async function handler(
       .map(option =>
         adminSupabase.storage
           .from("polls")
-          .upload(`${poll!.id}/${option.id}.png`, decode(option.image!), {
+          .upload(`${poll!.id}/${option.id}`, decode(option.image!), {
             contentType: option.contentType,
           })
       )
