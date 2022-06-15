@@ -1,6 +1,7 @@
 import { faImage } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import type { NextPage } from "next"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import pluralize from "pluralize"
@@ -172,6 +173,7 @@ const Home: NextPage = () => {
                 <img
                   className="rounded-lg"
                   src={URL.createObjectURL(option.image)}
+                  alt="A selected image"
                 />
               )}
             </div>
