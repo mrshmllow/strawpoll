@@ -44,6 +44,7 @@ export default async function handler(
     options === undefined ||
     !Array.isArray(options) ||
     options.length < 2 ||
+    options.length > 10 ||
     typeof question !== "string" ||
     question.length > 70
   ) {
