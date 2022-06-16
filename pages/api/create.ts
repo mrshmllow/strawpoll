@@ -3,8 +3,8 @@ import shortUUID from "short-uuid"
 import { adminSupabase } from "../../lib/adminSupabaseClient"
 import { IOption, IPoll } from "../../types/tables"
 import * as colours from "../../lib/colours/colours"
-import fetch, { Blob, File, Response } from "node-fetch"
 import { decode } from "base64-arraybuffer"
+import { Blob } from "node-fetch"
 
 const short = shortUUID()
 
@@ -12,10 +12,12 @@ export interface CreateReturn {
   error: true | null | string
   url: string | null
 }
+
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "20mb",
+      // 8mb limit per image, + 1 mb for data
+      sizeLimit: `${8 * 10 + 1}mb`,
     },
   },
 }
@@ -37,7 +39,10 @@ export default async function handler(
   options =
     options &&
     options.filter(
-      option => option.option.length > 0 && option.option.length <= 70
+      option =>
+        option.option.length > 0 &&
+        option.option.length <= 70 &&
+        new Blob([option.image!]).size <= 1000000 * 8
     )
 
   if (
