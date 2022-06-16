@@ -1,7 +1,6 @@
 import { faImage } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import type { NextPage } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import pluralize from "pluralize"
@@ -24,8 +23,8 @@ const Home: NextPage = () => {
   const titleRef = useRef<HTMLInputElement>(null!)
   const [title, setTitle] = useState("")
   const [options, setOptions] = useState<
-    { id: string; option: string; image?: File }[]
-  >([{ id: "imspecial", option: "" }])
+    { id: string; option: string; image?: File, alert: string }[]
+  >([{ id: "imspecial", option: "", alert: "" }])
   const useable = useMemo(
     () => options.filter(option => option.option.length > 0),
     [options]
@@ -68,6 +67,7 @@ const Home: NextPage = () => {
           </legend>
           {options.map((option, index) => (
             <div className="flex flex-col gap-2" key={option.id}>
+              {option.alert && <p>{option.alert}</p>}
               <div className="flex items-center gap-2">
                 <input
                   type="text"
@@ -91,6 +91,7 @@ const Home: NextPage = () => {
                         {
                           id: short.new(),
                           option: "",
+                          alert: ""
                         },
                       ])
                     } else if (
@@ -130,14 +131,26 @@ const Home: NextPage = () => {
                       className="hidden"
                       id={`${option.id}.picker`}
                       onChange={e => {
-                        setOptions(options => {
-                          const copy = options.slice()
-                          copy[index] = {
-                            ...copy[index],
-                            image: e.target.files![0],
-                          }
-                          return copy
-                        })
+                        if (e.target.files![0].size > 1000000 * 8) {
+                          setOptions(options => {
+                            const copy = options.slice()
+                            copy[index] = {
+                              ...copy[index],
+                              alert: "An 8mb limit applies to all images"
+                            }
+                            return copy
+                          })
+                        } else {
+                          setOptions(options => {
+                            const copy = options.slice()
+                            copy[index] = {
+                              ...copy[index],
+                              image: e.target.files![0],
+                              alert: ""
+                            }
+                            return copy
+                          })
+                        }
                       }}
                     />
                     <button
